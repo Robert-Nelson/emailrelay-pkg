@@ -1,0 +1,34 @@
+#!/bin/sh
+RECIPIENT_FILE=/var/etc/emailrelay.valid
+VALID_RECIPIENTS=""
+if [ -f $RECIPIENT_FILE ]; then
+	VALID_RECIPIENTS=`cat $RECIPIENT_FILE`
+fi
+if [ -z "$VALID_RECIPIENTS" ]; then
+	echo ""
+	echo $1
+	exit 1
+fi
+for RECIPIENT in $VALID_RECIPIENTS; do
+	RECIPIENT=`echo $RECIPIENT | tr '[a-z]' '[A-Z]'`
+	IFS='@' read USERNAME DOMAIN <<- EOD
+		$RECIPIENT
+EOD
+	if [ -z "$DOMAIN" ]; then
+		DOMAIN="$USERNAME"
+		USERNAME=""
+	fi
+	if [ -n "$USERNAME" ]; then
+		if [ "$USERNAME" = "$2" -a "$DOMAIN" = "$3" ]; then
+			echo ""
+			echo $1
+			exit 1
+		fi
+	elif [ "$DOMAIN" = "$3" ]; then
+		echo ""
+		echo $1
+		exit 1
+	fi
+done
+echo "Recipient not allowed: $1"
+exit 2

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<packagegui>
+  <name>E-MailRelay</name>
+  <version>1.9 pkg 0.9.0</version>
+  <title>E-MailRelay</title>
+  <include_file>/usr/local/pkg/emailrelay.inc</include_file>
+  <configpath>installedpackages->$packagename->config</configpath>
+  <menu>
+    <name>E-MailRelay</name>
+    <section>Services</section>
+    <configfile>emailrelay.xml</configfile>
+    <tooltiptext>E-MailRelay settings.</tooltiptext>
+    <url>/pkg_edit.php?xml=emailrelay.xml</url>
+  </menu>
+  <service>
+    <name>emailrelay</name>
+    <rcfile>emailrelay</rcfile>
+    <executable>emailrelay</executable>
+    <description>E-MailRelay Daemon</description>
+  </service>
+  <additional_files_needed>
+    <prefix>/usr/local/pkg/</prefix>
+    <chmod>0644</chmod>
+    <item>http://pfsense-packages.nelson-morfa.org/packages/config/emailrelay/emailrelay.xml</item>
+  </additional_files_needed>
+  <additional_files_needed>
+    <prefix>/usr/local/pkg/</prefix>
+    <chmod>0644</chmod>
+    <item>http://pfsense-packages.nelson-morfa.org/packages/config/emailrelay/emailrelay.inc</item>
+  </additional_files_needed>
+  <additional_files_needed>
+    <prefix>/usr/local/pkg/emailrelay/</prefix>
+    <chmod>0755</chmod>
+    <item>http://pfsense-packages.nelson-morfa.org/packages/config/emailrelay/emailrelay-verify</item>
+  </additional_files_needed>
+  <fields>
+    <field>
+      <fielddescr>Enabled</fielddescr>
+      <fieldname>enable</fieldname>
+      <description>Enable service.</description>
+      <type>checkbox</type>
+    </field>
+    <field>
+      <fielddescr>Interface Selection</fielddescr>
+      <fieldname>interfaces</fieldname>
+      <type>interfaces_selection</type>
+      <description>Select interfaces to listen on</description>
+      <multiple/>
+      <required/>
+      <hideinterfaceregex>(wan|loopback)</hideinterfaceregex>
+    </field>
+    <field>
+      <fielddescr>Security</fielddescr>
+      <fieldname>security</fieldname>
+      <description>Security should be STARTTLS which ensures that username/password are sent using encryption. SSMTP also uses encryption but is obsolete.</description>
+      <type>select</type>
+      <default>starttls</default>
+      <required/>
+      <options>
+        <option><name>None</name><value>none</value></option>
+        <option><name>STARTTLS</name><value>starttls</value></option>
+        <option><name>SSMTP (deprecated)</name><value>ssmtp</value></option>
+      </options>
+    </field>
+    <field>
+      <fielddescr>Server Host</fielddescr>
+      <fieldname>server</fieldname>
+      <description>E-Mail server to which mail is forwarded</description>
+      <type>input</type>
+      <required/>
+    </field>
+    <field>
+      <fielddescr>Port</fielddescr>
+      <fieldname>port</fieldname>
+      <description>E-Mail Server port is usually 587 when security is None or STARTTLS, 465 for SSMTP (deprecated)</description>
+      <type>input</type>
+      <size>5</size>
+      <required/>
+      <default_value>587</default_value>
+    </field>
+    <field>
+      <fielddescr>User Name</fielddescr>
+      <fieldname>username</fieldname>
+      <description>User name used to login to Server Host.</description>
+      <type>input</type>
+      <required/>
+    </field>
+    <field>
+      <fielddescr>Password</fielddescr>
+      <fieldname>password</fieldname>
+      <description>Password used to login to Server Host.</description>
+      <type>password</type>
+      <required/>
+    </field>
+    <field>
+      <fielddescr>Authentication</fielddescr>
+      <fieldname>authentication</fieldname>
+      <description>Authentication usually is PLAIN although some hosts use LOGIN.</description>
+      <type>select</type>
+      <default>PLAIN</default>
+      <required/>
+      <options>
+        <option><name>PLAIN</name><value>PLAIN</value></option>
+        <option><name>LOGIN (deprecated)</name><value>LOGIN</value></option>
+        <option><name>CRAM-MD5</name><value>CRAM-MD5</value></option>
+      </options>
+    </field>
+    <field>
+      <fielddescr>Allowed recipients</fielddescr>
+      <fieldname>allowed</fieldname>
+      <description>Whitespace delimited list of allowed recipients.  These can be full e-mail addresses or just the domains with or without an initial @.  If left blank then all recipients are allowed.</description>
+      <type>textarea</type>
+      <rows>10</rows>
+      <cols>50</cols>
+      <encoding>base64</encoding>
+    </field>
+    <field>
+      <fielddescr>Verbose</fielddescr>
+      <fieldname>verbose</fieldname>
+      <description>Increase amount of information logged, useful for troubleshooting problems.</description>
+      <type>checkbox</type>
+      <advancedfield/>
+    </field>
+  </fields>
+  <custom_php_install_command>
+    emailrelay_install_command();
+  </custom_php_install_command>
+  <custom_php_deinstall_command>
+    emailrelay_deinstall_command();
+  </custom_php_deinstall_command>
+  <custom_php_resync_config_command>
+    emailrelay_resync_config_command();
+  </custom_php_resync_config_command>
+</packagegui>
