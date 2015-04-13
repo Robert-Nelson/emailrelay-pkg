@@ -8,10 +8,17 @@
     All rights reserved.
 */
 
-require_once("config.inc");
-require_once("interfaces.inc");
-require_once("services.inc");
-require_once("service-utils.inc");
+if (!function_exists("write_config"))
+	require_once("config.inc");
+
+if (!function_exists("get_interface_ip"))
+	require_once("interfaces.inc");
+
+if (!function_exists("start_service"))
+	require_once("service-utils.inc");
+
+if (!function_exists("log_error"))
+	require_once("util.inc");
 
 function emailrelay_warn($msg)
 {
@@ -36,7 +43,6 @@ function xtext_encode($input)
 function emailrelay_resync_config_command()
 {
 	global $config;
-	global $emailrelay_cron_command;
 
 	$emailrelay_config = $config['installedpackages']['emailrelay']['config'][0];
 	$enabled = isset($emailrelay_config['enable']);
@@ -92,10 +98,10 @@ function emailrelay_resync_config_command()
 		$enabled = False;
 	}
 
+	stop_service('emailrelay');
+
 	if ($enabled) {
-		restart_service('emailrelay');
-	} else {
-		stop_service('emailrelay');
+		start_service('emailrelay');
 	}
 }
 
@@ -108,9 +114,8 @@ EOD;
 	$stop = <<<EOD
 if [ -f /var/run/emailrelay.pid ]; then
 	pkill -F /var/run/emailrelay.pid emailrelay
-	sleep 5
+	sleep 2
 fi
-pkill -9 emailrelay
 EOD;
 	write_rcfile(array('file' => 'emailrelay', 'start' => $start, 'stop' => $stop));
 	
@@ -119,7 +124,9 @@ EOD;
 
 	stop_service('emailrelay');
 	
-	$config['installedpackages']['emailrelay']['config'][0]['enable'] = '';
+	if (isset($config['installedpackages']['emailrelay']['config'][0]['enable'])) {
+		$config['installedpackages']['emailrelay']['config'][0]['enable'] = '';
+	}
 
 	write_config('Disabled emailrelay until configured');
 }

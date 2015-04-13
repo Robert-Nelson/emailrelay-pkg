@@ -7,7 +7,7 @@
 <depends_on_package_base_url>http://pfsense-packages.nelson-morfa.org/files/packages/10/All/</depends_on_package_base_url>
 <packages>
 	<package>
-		<name>EmailRelay</name>
+		<name>E-MailRelay</name>
 		<pkginfolink></pkginfolink>
 		<descr><![CDATA[E-MailRelay is a simple SMTP proxy and store-and-forward message transfer agent
 			(MTA). When running as a proxy all e-mail messages can be passed through a
@@ -32,11 +32,11 @@
 			<facilityname>emailrelay</facilityname>
 			<logfilename>emailrelay.log</logfilename>
 		</logging>
-		<after_install_info>Please configure the Services: EmailRelay.</after_install_info>
+		<after_install_info>Please configure the Service: E-MailRelay.</after_install_info>
 		<build_pbi>
 			<port>mail/emailrelay</port>
 		</build_pbi>
-		<build_options>OPTIONS_UNSET_FORCE=GUI DOXYGEN MAN2HTML DOCS</build_options>
+		<build_options>OPTIONS_UNSET_FORCE=GUI DOXYGEN DOCS</build_options>
 		<depends_on_package_pbi>emailrelay-1.9-##ARCH##.pbi</depends_on_package_pbi>
 	</package>
 </packages>

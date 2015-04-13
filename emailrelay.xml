@@ -2,15 +2,14 @@
 <packagegui>
   <name>E-MailRelay</name>
   <version>1.9 pkg 0.9.0</version>
-  <title>E-MailRelay</title>
+  <title>E-MailRelay: Settings</title>
   <include_file>/usr/local/pkg/emailrelay.inc</include_file>
   <configpath>installedpackages->$packagename->config</configpath>
   <menu>
     <name>E-MailRelay</name>
     <section>Services</section>
-    <configfile>emailrelay.xml</configfile>
     <tooltiptext>E-MailRelay settings.</tooltiptext>
-    <url>/pkg_edit.php?xml=emailrelay.xml</url>
+    <url>/emailrelay-viewlog.php</url>
   </menu>
   <service>
     <name>emailrelay</name>
@@ -33,6 +32,22 @@
     <chmod>0755</chmod>
     <item>http://pfsense-packages.nelson-morfa.org/packages/config/emailrelay/emailrelay-verify</item>
   </additional_files_needed>
+  <additional_files_needed>
+    <prefix>/usr/local/www/</prefix>
+    <chmod>0755</chmod>
+    <item>http://pfsense-packages.nelson-morfa.org/packages/config/emailrelay/emailrelay-viewlog.php</item>
+  </additional_files_needed>
+  <tabs>
+    <tab>
+      <text>Settings</text>
+      <xml>emailrelay.xml</xml>
+      <active/>
+    </tab>
+    <tab>
+      <text>Log</text>
+      <url>/emailrelay-viewlog.php</url>
+    </tab>
+  </tabs>
   <fields>
     <field>
       <fielddescr>Enabled</fielddescr>
